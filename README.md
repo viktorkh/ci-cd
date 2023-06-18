@@ -4,10 +4,10 @@
 נתחיל עם terraform גם ב-AWS וגם ב- GCP
 שלב ראשון - מערכת WEB  כולל:
 
-VPC
-Network VPC
-Secure Group
-EC2/ Compute Engine
+VPC / 
+Network VPC /
+Secure Group / 
+EC2 or Compute Engine / 
 DB
 
 
