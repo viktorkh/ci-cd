@@ -10,5 +10,6 @@ Secure Group /
 EC2 or Compute Engine / 
 DB
 
+לכל שאלה בהרשאות אפשר לפנות ל- victork@digital.gov.il
 
 
