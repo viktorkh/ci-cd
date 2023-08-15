@@ -1,32 +1,32 @@
 provider "google" {
-  #credentials = file("<path_to_gcp_credentials_file>")
-  project     = "<your_gcp_project_id>"
-  region      = "me-west11"
+  #credentials = file("path/to/your/gcp_credentials.json")
+  project = var.project_id
+  #"ccoe-dev-qa01"
+  region = var.region
 }
+
 
 module "vpc" {
-  source = "./vpc"
+  source = "./modules/vpc"
+  region = var.region
 }
 
-module "ec2" {
-  source              = "./ec2"
-  vpc_network_name    = module.vpc.vpc_network_name
-  vpc_subnetwork_name = module.vpc.vpc_subnetwork_name
-  region              = "me-west1"
+module "compute_instance" {
+  source = "./modules/compute_instance"
+  #region              = var.region
+  vpc_network_name = module.vpc.vpc_network_name
+  vpc_network_id   = module.vpc.vpc_network_id
+  vpc_subnet_name  = module.vpc.vpc_subnet_name
+  zone             = var.zone
 }
 
-module "cloudsql" {
-  source = "./cloudsql"
+module "sql_database" {
+  source           = "./modules/sql_database"
+  region           = var.region
+  vpc_network_id   = module.vpc.vpc_network_id
+  vpc_network_name = module.vpc.vpc_network_name
+  depends_on       = [module.vpc.vpc_private_ip, module.vpc.vpc_private_ip_address, module.vpc.vpc_private_service_connection]
 }
 
-module "lb" {
-  source = "./lb"
 
-  instance_group_members = [module.ec2.instance_self_link]
-  region                 = "me-west1"
-}
 
-output "instance_ip" {
-  description = "The public IP address of the EC2 instance."
-  value       = module.ec2.instance_ip
-}
